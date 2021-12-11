@@ -86,9 +86,15 @@ async function run(): Promise<void> {
       cwd: `${workingDir}/public`,
     })
 
-    await exec.exec(`git push`, ['-f', repoURL, `master:${deployBranch}`], {
-      cwd: `${workingDir}/public`,
-    })
+    if (exists) {
+      await exec.exec(`git push`, ['-f', repoURL, `${deployBranch}:${deployBranch}`], {
+        cwd: `${workingDir}/public`,
+      })
+    } else {
+      await exec.exec(`git push`, ['-f', repoURL, `master:${deployBranch}`], {
+        cwd: `${workingDir}/public`,
+      })
+    }
     console.log('Finished deploying your site.')
 
     console.log('Enjoy! ✨')
