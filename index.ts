@@ -63,7 +63,10 @@ async function run(): Promise<void> {
     console.log(`Deploying to repo: ${repo} and branch: ${deployBranch}`)
     console.log('You can configure the deploy branch by setting the `deploy-branch` input for this action.')
 
-    await exec.exec(`git init`, [], {cwd: `${workingDir}/public`})
+    const exists = await ioUtil.exists(`${workingDir}/public/.git/config`)
+    if (!exists) {
+      await exec.exec(`git init`, [], {cwd: `${workingDir}/public`})
+    }
 
     const gitUserName = core.getInput('git-config-name') || github.context.actor
     const gitEmail = core.getInput('git-config-email') || `${github.context.actor}@users.noreply.github.com`
