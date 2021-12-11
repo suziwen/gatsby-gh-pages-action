@@ -78,7 +78,7 @@ async function run(): Promise<void> {
       cwd: `${workingDir}/public`,
     })
 
-    await exec.exec(`git add`, ['.'], {cwd: `${workingDir}/public`})
+    await exec.exec(`git add`, ['--all', '.'], {cwd: `${workingDir}/public`})
 
     const commitMessageInput =
       core.getInput('commit-message') || `deployed via Gatsby Publish Action 🎩 for ${github.context.sha}`
@@ -87,7 +87,7 @@ async function run(): Promise<void> {
     })
 
     if (exists) {
-      await exec.exec(`git push`, ['-f', repoURL, `${deployBranch}:${deployBranch}`], {
+      await exec.exec(`git push`, ['-f', repoURL], {
         cwd: `${workingDir}/public`,
       })
     } else {
