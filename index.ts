@@ -66,6 +66,14 @@ async function run(): Promise<void> {
     const exists = await ioUtil.exists(`${workingDir}/public/.git/config`)
     if (!exists) {
       await exec.exec(`git init`, [], {cwd: `${workingDir}/public`})
+    } else {
+      await exec.exec(`git state`, [], {
+        cwd: `${workingDir}/public`,
+      })
+      await exec.exec(`git branch`, ['--all'], {
+        cwd: `${workingDir}/public`,
+      })
+      await exec.exec(`git switch`, ['-c', `${deployBranch}`], {cwd: `${workingDir}/public`})
     }
 
     const gitUserName = core.getInput('git-config-name') || github.context.actor
