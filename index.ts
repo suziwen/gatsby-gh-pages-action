@@ -87,7 +87,7 @@ async function run(): Promise<void> {
     })
 
     if (exists) {
-      await exec.exec(`git push`, ['-f', repoURL], {
+      await exec.exec(`git push`, ['-f'], {
         cwd: `${workingDir}/public`,
       })
     } else {
