@@ -30,16 +30,6 @@ async function run(): Promise<void> {
 
     const workingDir = core.getInput('working-dir') || '.'
 
-    const exists = await ioUtil.exists(`${workingDir}/public/.git/config`)
-    if (exists) {
-      await exec.exec(`git status`, [], {
-        cwd: `${workingDir}/public`,
-      })
-      await exec.exec(`git branch`, ['--all'], {
-        cwd: `${workingDir}/public`,
-      })
-      await exec.exec(`git switch`, ['-c', `${deployBranch}`], {cwd: `${workingDir}/public`})
-    }
 
     const pkgManager = (await ioUtil.exists(`${workingDir}/yarn.lock`)) ? 'yarn' : 'npm'
     console.log(`Installing your site's dependencies using ${pkgManager}.`)
@@ -75,6 +65,7 @@ async function run(): Promise<void> {
     console.log(`Deploying to repo: ${repo} and branch: ${deployBranch}`)
     console.log('You can configure the deploy branch by setting the `deploy-branch` input for this action.')
 
+    const exists = await ioUtil.exists(`${workingDir}/public/.git/config`)
     if (!exists) {
       await exec.exec(`git init`, [], {cwd: `${workingDir}/public`})
     }
@@ -98,7 +89,7 @@ async function run(): Promise<void> {
     })
 
     if (exists) {
-      await exec.exec(`git push`, ['-f', repoURL, '-u', 'origin', `${deployBranch}`], {
+      await exec.exec(`git push`, ['-f'], {
         cwd: `${workingDir}/public`,
       })
     } else {
