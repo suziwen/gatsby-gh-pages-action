@@ -30,7 +30,6 @@ async function run(): Promise<void> {
 
     const workingDir = core.getInput('working-dir') || '.'
 
-
     const pkgManager = (await ioUtil.exists(`${workingDir}/yarn.lock`)) ? 'yarn' : 'npm'
     console.log(`Installing your site's dependencies using ${pkgManager}.`)
     await exec.exec(`${pkgManager} install`, [], {cwd: workingDir})
